@@ -8,5 +8,19 @@ export default function formatNumber(number, option) {
   // * Please implement the function and pass all the tests in format_number_spec.js.
   // * Please do NOT modify the signature of the function.
 
-  throw new Error('Please delete this line and implement the function');
+  // check if input parameters are null
+  expect(number != null && option != null);
+
+  // check if number is type of 'Number'
+  expect(typeof number === 'number');
+
+  // fix number part
+  let formattedNumberStr = `${number.toFixed(2)}`;
+
+  // check if '$' sign should be added
+  if (option !== undefined && option.hasOwnProperty('currency') && option.currency === true) {
+    formattedNumberStr = `$ ${formattedNumberStr}`;
+  }
+
+  return formattedNumberStr;
 }
