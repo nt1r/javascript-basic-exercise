@@ -9,5 +9,52 @@ export default function waitForAll(...promises) {
   // * Please implement this function and pass all the tests in wait_for_all_spec.js.
   // * Please do NOT modify the signature of the function.
 
-  throw new Error('Please delete this line and implement the function');
+  // check if all input parameters are all 'Promise' type
+  for (let promise of promises) {
+    if (Promise.resolve(promise) !== promise) {
+      throw new Error('Not all elements are promises.')
+    }
+  }
+
+  // check if `${promises}` is empty
+  if (promises.length === 0) {
+    return new Promise(_ => 'Empty input');
+  }
+
+  return new Promise((resolve, reject) => {
+    const promiseResultList = [];
+
+    function addOnePromiseResult(promiseResult) {
+      // push one result to list
+      promiseResultList.push(promiseResult);
+
+      // when the list is full
+      if (promiseResultList.length === promises.length) {
+        // judge if any promise result fail
+        for (let onePromiseResult of promiseResultList) {
+          if (onePromiseResult.success === false) {
+            reject();
+            return;
+          }
+        }
+        // if all result are succeeded
+        resolve();
+      }
+    }
+
+    // for-loop each promise
+    for (let promise of promises) {
+      promise.then(
+        (value) => {
+          addOnePromiseResult({
+            success: true
+          })
+        }, (reason) => {
+          addOnePromiseResult({
+            success: false
+          })
+        }
+      );
+    }
+  })
 }
